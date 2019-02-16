@@ -884,7 +884,6 @@ draw_passwd_window (saver_info *si)
       if ( bStats != NULL ) {
         if(bStats[0].name[0] != '\0') {
           sprintf(buf,"%s %d%% ",bStats[0].name,bStats[0].capacity);
-          pw->battery_stats = strdup(bufb);
         }
         free((void *)bStats);
       }
