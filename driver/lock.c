@@ -27,6 +27,7 @@
 #include "resources.h"
 #include "mlstring.h"
 #include "auth.h"
+#include "sysBat.h"
 
 #ifndef NO_LOCKING              /* (mostly) whole file */
 
@@ -76,7 +77,7 @@ vms_passwd_valid_p(char *pw, Bool verbose_p)
 #endif /* VMS */
 
 #define SAMPLE_INPUT "MMMMMMMMMMMM"
-
+const static char NO_BATTERY[] = "No battery";
 
 #undef MAX
 #define MAX(a,b) ((a)>(b)?(a):(b))
@@ -112,6 +113,8 @@ struct passwd_dialog_data {
   Bool echo_input;
   Bool show_stars_p; /* "I regret that I have but one asterisk for my country."
                         -- Nathan Hale, 1776. */
+
+  Bool battery_stats;
 
   char *heading_label;
   char *body_label;
@@ -220,6 +223,9 @@ new_passwd_window (saver_info *si)
 
   pw->show_stars_p = get_boolean_resource(si->dpy, "passwd.asterisks", 
 					  "Boolean");
+  
+  pw->battery_stats = get_boolean_resource(si->dpy, "showBatteryStats",
+            "Boolean");
   
   pw->heading_label = get_string_resource (si->dpy, "passwd.heading.label",
 					   "Dialog.Label.Label");
@@ -866,12 +872,34 @@ draw_passwd_window (saver_info *si)
   /* The date, below the text fields
    */
   {
-    char buf[100];
+    char buf[150];
     time_t now = time ((time_t *) 0);
     struct tm *tm = localtime (&now);
+    size_t off_date = 0;
     memset (buf, 0, sizeof(buf));
-    strftime (buf, sizeof(buf)-1, pw->date_label, tm);
-
+    
+    if (pw->battery_stats) {
+      struct BatStats * bStats = getBatStats();
+      
+      if ( bStats != NULL ) {
+        if(bStats[0].name[0] != '\0') {
+          sprintf(buf,"%s %d%% ",bStats[0].name,bStats[0].capacity);
+          pw->battery_stats = strdup(bufb);
+        }
+        free((void *)bStats);
+      }
+      
+      if (buf[0] == '\0') {
+        strcpy(buf,NO_BATTERY);
+        off_date = sizeof(NO_BATTERY);
+        buf[off_date] = ' ';
+      } else {
+        off_date = strlen(buf);
+      }
+    }
+    
+    strftime (buf+off_date, sizeof(buf-off_date)-1, pw->date_label, tm);
+    
     XSetFont (si->dpy, gc1, pw->date_font->fid);
     y1 += pw->shadow_width;
     y1 += (spacing + tb_height);
