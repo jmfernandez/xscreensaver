@@ -897,7 +897,7 @@ draw_passwd_window (saver_info *si)
       }
     }
     
-    strftime (buf+off_date, sizeof(buf-off_date)-1, pw->date_label, tm);
+    strftime (buf+off_date, sizeof(buf)-off_date-1, pw->date_label, tm);
     
     XSetFont (si->dpy, gc1, pw->date_font->fid);
     y1 += pw->shadow_width;
