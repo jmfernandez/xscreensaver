@@ -108,10 +108,10 @@ PAM_OBJS	= passwd-pam.o
 PWHELPER_SRCS	= passwd-helper.c
 PWHELPER_OBJS	= passwd-helper.o
 
-LOCK_SRCS_1	= lock.c passwd.c sysBat.c
-LOCK_OBJS_1	= lock.o passwd.o sysBat.o
-NOLOCK_SRCS_1	= lock.c sysBat.c
-NOLOCK_OBJS_1	= lock.o sysBat.o
+LOCK_SRCS_1	= lock.c passwd.c sysBatt.c
+LOCK_OBJS_1	= lock.o passwd.o sysBatt.o
+NOLOCK_SRCS_1	= lock.c sysBatt.c
+NOLOCK_OBJS_1	= lock.o sysBatt.o
 
 TEST_SRCS	= test-passwd.c test-uid.c  test-xdpms.c    test-grab.c \
 		  test-apm.c    test-fade.c test-xinerama.c test-vp.c   \
@@ -227,7 +227,7 @@ SCRIPTS		= $(SCRIPTS_1) @SCRIPTS_OSX@
 
 HDRS		= XScreenSaver_ad.h XScreenSaver_Xm_ad.h \
 		  xscreensaver.h prefs.h remote.h exec.h \
-		  demo-Gtk-conf.h auth.h mlstring.h types.h sysBat.h
+		  demo-Gtk-conf.h auth.h mlstring.h types.h sysBatt.h
 MEN_1		= xscreensaver.man xscreensaver-demo.man \
 		  xscreensaver-command.man \
 		  xscreensaver-text.man \
