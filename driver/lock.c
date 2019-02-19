@@ -27,7 +27,7 @@
 #include "resources.h"
 #include "mlstring.h"
 #include "auth.h"
-#include "sysBat.h"
+#include "sysBatt.h"
 
 #ifndef NO_LOCKING              /* (mostly) whole file */
 
@@ -879,19 +879,19 @@ draw_passwd_window (saver_info *si)
     memset (buf, 0, sizeof(buf));
     
     if (pw->battery_stats) {
-      struct BatStats * bStats = getBatStats();
+      struct BattStats * bStats = getBattStats();
       
       if ( bStats != NULL ) {
         if(bStats[0].name[0] != '\0') {
-          sprintf(buf,"%s %d%% ",bStats[0].name,bStats[0].capacity);
+          snprintf(buf,sizeof(buf),"%s %d%% ",bStats[0].name,bStats[0].capacity);
         }
         free((void *)bStats);
       }
       
       if (buf[0] == '\0') {
-        strcpy(buf,NO_BATTERY);
+        memcpy(buf,NO_BATTERY,sizeof(NO_BATTERY));
         off_date = sizeof(NO_BATTERY);
-        buf[off_date] = ' ';
+        buf[sizeof(NO_BATTERY)-1] = ' ';
       } else {
         off_date = strlen(buf);
       }
